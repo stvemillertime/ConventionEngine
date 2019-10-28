@@ -1227,3 +1227,15 @@ rule ConventionEngine_Anomaly_OutsideOfDebug
  condition:
  (uint16(0) == 0x5A4D) and uint32(uint32(0x3C)) == 0x00004550 and $pcre and pe.data_directories[pe.IMAGE_DIRECTORY_ENTRY_DEBUG].virtual_address == 0
 }
+rule ConventionEngine_Term_Users_User
+{
+ meta:
+ author = "@stvemillertime"
+ description = "Searching for PE files with PDB path keywords, terms or anomalies."
+ sample_md5 = "b7c3039203278bc289fd3756571bd468"
+ ref_blog = "https://www.fireeye.com/blog/threat-research/2019/08/definitive-dossier-of-devilish-debug-details-part-one-pdb-paths-malware.html"
+ strings:
+ $pcre = /RSDS[\x00-\xFF]{20}[a-zA-Z]:\\[\x00-\xFF]{0,200}Users\\user[\x00-\xFF]{0,200}\.pdb\x00/ nocase ascii
+ condition:
+ (uint16(0) == 0x5A4D) and uint32(uint32(0x3C)) == 0x00004550 and $pcre
+}
